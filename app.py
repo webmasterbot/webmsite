@@ -7,11 +7,13 @@ logger.info("Log started")
 
 app = Flask(__name__)
 
-lastHeard = "Not heard from"
+lastHeard = None
 
 @app.route('/')
 def main():
-	return render_template("main.html", lastHeard=time.time()-lastHeard)
+	if lastHeard:
+		return render_template("main.html", lastHeard=float(time.time()-lastHeard))
+	return render_template("main.html", lastHeard="Not heard since program start")
 
 @app.route('/heartbeat', methods=['POST'])
 def heartbeat():
@@ -19,11 +21,11 @@ def heartbeat():
 	lastHeard = time.time()
 	data = request.data
 	print(data.decode())
-	return 200
+	return "success", 200
 
 @app.route('/heartbeat', methods=['GET'])
 def heartbeatGet():
-	return str(time.time()-lastHeard)
+	return {"lastheard": str(time.time()-lastHeard)}
 
 if __name__ == "__main__":
 	app.run(port=5000)
