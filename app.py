@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 import tracemalloc, asyncio,  os, logging, requests, time
 
 logging.basicConfig(filename="log.txt", level=logging.INFO, filemode="w")
@@ -27,6 +27,12 @@ def heartbeat():
 def heartbeatGet():
 	global lastHeard
 	return jsonify({"lastheard": lastHeard}), 200
+
+@app.route("/fakeheartbeat", methods=["GET"])
+def devHeartbeatEmulator():
+	data = heartbeat()
+	return redirect(url_for("main"), code=307)
+
 
 if __name__ == "__main__":
 	app.run(port=5000)
