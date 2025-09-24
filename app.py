@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import tracemalloc, asyncio,  os, logging, requests, time
 
 logging.basicConfig(filename="log.txt", level=logging.INFO, filemode="w")
@@ -13,7 +13,7 @@ lastHeard = None
 def main():
 	if lastHeard:
 		return render_template("main.html", lastHeard=float(time.time()-lastHeard))
-	return render_template("main.html", lastHeard="Not heard since program start")
+	return render_template("main.html", lastHeard="<not heard from yet>")
 
 @app.route('/heartbeat', methods=['POST'])
 def heartbeat():
@@ -25,7 +25,8 @@ def heartbeat():
 
 @app.route('/heartbeat', methods=['GET'])
 def heartbeatGet():
-	return {"lastheard": str(time.time()-lastHeard)}
+	global lastHeard
+	return jsonify({"lastheard": lastHeard}), 200
 
 if __name__ == "__main__":
 	app.run(port=5000)

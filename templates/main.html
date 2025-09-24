@@ -6,36 +6,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="icon" type="image/x-icon" href="webmaster.jpeg">
 </head>
+
+
 <body>
 	<div id="lastHeardBox" class="lastHeardBox">
-	<p id="lastHeardText">Last heard from: {{ lastHeard }}</p>
+	<p id="lastHeardText">Last heard from: <span id="lastHeardSpan"></span> seconds ago</p>
 	</div>
-<script>
-	var lastHeardText = document.getElementById("lastHeardText");
-	var lastHeardBox = document.getElementById("lastHeardBox");
-	
-	function updateLastHeard() {
-		fetch("http://127.0.0.1:5000/heartbeat")
-		.then((response) => response.json())
-		.then((data) => var responseData = data);
-		var lastHeard = responseData.lastheard
-		lastHeardText.innerHTML = `Last heard from: ${lastHeard}`
-		if (isNaN(lastHeard)) {
-			return
-		}
-		lastHeard = parseInt(lastHeard)
-		if (lastHeard <= 30) {
-			lastHeardBox.style.backgroundColor = "green";
-		} else if (lastHeard >30 && lastHeard <= 60) {
-			let green = (lastHeard/60)*256;
-			let red = 256-green;
-			lastHeardBox.style.backgroundColor = `rgb(${red},${green},0)`;
-		} else if (lastHeard > 60) {
-			lastHeardBox.style.backgroundColor = "red";
-		} else {
-			lastHeardBox.style.backgroundColor = "gray";
-		};
-	setInterval(updateLastHeard(), 2000);
-</script>
+	<script src={{ url_for("static", filename="clockwork.js") }}></script>
 </body>
 </html>
