@@ -13,7 +13,8 @@ lastHeard = None
 def main():
 	if lastHeard:
 		return render_template("main.html", lastHeard=float(time.time()-lastHeard))
-	return render_template("main.html", lastHeard="<not heard from yet>")
+	if not lastHeard or lastHeard > 14400:
+		return render_template("main.html", lastHeard=None)
 
 @app.route('/heartbeat', methods=['POST'])
 def heartbeat():
