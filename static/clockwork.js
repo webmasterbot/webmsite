@@ -31,7 +31,7 @@ async function updateLastBeat() {
 		const data = await r.json();
 		lastBeat = data.lastheard;
 	} catch {
-		alert("Some kind of error happened!");
+		lastBeat = null;
 	}
 };
 
